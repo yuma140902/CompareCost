@@ -8,6 +8,10 @@ import android.widget.ListView
 
 private const val NUM_ROWS: Int = 3
 
+fun isPlain(d: Double?): Boolean {
+    return d != null && !d.isNaN() && !d.isInfinite()
+}
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var adapter: ListAdapter
@@ -33,7 +37,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun sorted3(rows: Array<RowItem?>): Triple<RowItem?, RowItem?, RowItem?> {
-        val sorted = rows.filterNotNull().filter { it.model.calcResult() != null }.sortedBy { it.model.calcResult() }
+        val sorted = rows.filterNotNull().filter { isPlain(it.model.calcResult())  }.sortedBy { it.model.calcResult() }
         return Triple(sorted.getOrNull(0), sorted.getOrNull(1), sorted.getOrNull(2))
     }
 
