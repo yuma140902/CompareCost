@@ -5,5 +5,4 @@
     <string name="input_amount">Amount</string>
     <string name="clear_all">Clear All</string>
     <string name="equals" translatable="false">=</string>
-    <string name="app_version_name" translatable="false">v0.0.1</string>
 </resources>
