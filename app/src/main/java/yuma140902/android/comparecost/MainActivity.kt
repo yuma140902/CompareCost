@@ -3,7 +3,6 @@ package yuma140902.android.comparecost
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -14,23 +13,23 @@ private const val NUM_ROWS: Int = 3
 class MainActivity(
 ) : AppCompatActivity() {
 
-    private var rows: Array<ViewRow?> = arrayOfNulls(NUM_ROWS)
+    private var rows: Array<Row?> = arrayOfNulls(NUM_ROWS)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        rows[0] = ViewRow(
+        rows[0] = Row(
             findViewById(R.id.yenEditNumber1),
             findViewById(R.id.amountEditNumber1),
             findViewById(R.id.yenTextView1)
         ) { update() }
-        rows[1] = ViewRow(
+        rows[1] = Row(
             findViewById(R.id.yenEditNumber2),
             findViewById(R.id.amountEditNumber2),
             findViewById(R.id.yenTextView2)
         ) { update() }
-        rows[2] = ViewRow(
+        rows[2] = Row(
             findViewById(R.id.yenEditNumber3),
             findViewById(R.id.amountEditNumber3),
             findViewById(R.id.yenTextView3)
@@ -46,7 +45,7 @@ class MainActivity(
         }
     }
 
-    private fun sorted3(rows: Array<ViewRow?>): Triple<ViewRow?, ViewRow?, ViewRow?> {
+    private fun sorted3(rows: Array<Row?>): Triple<Row?, Row?, Row?> {
         val sorted = rows.filterNotNull().filter { it.result != null }.sortedBy { it.result }
         return Triple(sorted.getOrNull(0), sorted.getOrNull(1), sorted.getOrNull(2))
     }
@@ -59,11 +58,11 @@ class MainActivity(
     }
 }
 
-class ViewRow(
+class Row(
     val yenEdit: EditText,
     val amountEdit: EditText,
     val resultView: TextView,
-    val onUpdated: (ViewRow) -> Unit
+    val onUpdated: (Row) -> Unit
 ) {
     var yen: Long? = null
         private set
