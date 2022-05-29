@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        adapter = ListAdapter(applicationContext) { update() }
+        adapter = ListAdapter(this) { update() }
         for (_i in 0 until NUM_ROWS) {
             adapter.add(RowItem(RowModel()))
         }
