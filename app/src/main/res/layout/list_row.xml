@@ -9,8 +9,6 @@
         android:id="@+id/yenEditNumber"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="@string/input_yen"
         android:imeOptions="actionNext"
@@ -74,8 +72,8 @@
         android:textIsSelectable="true"
         android:textSize="34sp"
         android:textStyle="bold"
-        app:layout_constraintBaseline_toBaselineOf="@+id/textView2"
         app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="@+id/amountEditNumber"
         app:layout_constraintWidth="80dp"
         tools:ignore="SpeakableTextPresentCheck" />
 
@@ -83,7 +81,6 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:text="@string/yen"
         app:layout_constraintBaseline_toBaselineOf="@+id/yenTextView"
         app:layout_constraintEnd_toEndOf="parent"
