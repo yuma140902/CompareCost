@@ -73,22 +73,16 @@ class ViewRow(
         private set
 
     init {
-        val self = this
-
-        yenEdit.addTextChangedListener(object : SimpleTextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                yen = s.toString().toLongOrNull()
-                update()
-                onUpdated(self)
-            }
+        yenEdit.addTextChangedListener(SimpleTextWatcher.after { s ->
+            yen = s.toString().toLongOrNull()
+            update()
+            onUpdated(this)
         })
 
-        amountEdit.addTextChangedListener(object : SimpleTextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                amount = s.toString().toDoubleOrNull()
-                update()
-                onUpdated(self)
-            }
+        amountEdit.addTextChangedListener(SimpleTextWatcher.after { s ->
+            amount = s.toString().toDoubleOrNull()
+            update()
+            onUpdated(this)
         })
     }
 
