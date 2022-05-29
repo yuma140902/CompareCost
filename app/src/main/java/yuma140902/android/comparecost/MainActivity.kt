@@ -4,103 +4,48 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import kotlin.math.roundToLong
+import android.widget.ListView
 
 private const val NUM_ROWS: Int = 3
 
-class MainActivity(
-) : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
 
-    private var rows: Array<Row?> = arrayOfNulls(NUM_ROWS)
+    private lateinit var adapter: ListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        rows[0] = Row(
-            findViewById(R.id.yenEditNumber1),
-            findViewById(R.id.amountEditNumber1),
-            findViewById(R.id.yenTextView1)
-        ) { update() }
-        rows[1] = Row(
-            findViewById(R.id.yenEditNumber2),
-            findViewById(R.id.amountEditNumber2),
-            findViewById(R.id.yenTextView2)
-        ) { update() }
-        rows[2] = Row(
-            findViewById(R.id.yenEditNumber3),
-            findViewById(R.id.amountEditNumber3),
-            findViewById(R.id.yenTextView3)
-        ) { update() }
+        adapter = ListAdapter(applicationContext) { update() }
+        for (_i in 0 until NUM_ROWS) {
+            adapter.add(RowItem(RowModel()))
+        }
+
+        val mainListView = findViewById<ListView>(R.id.main_list)
+        mainListView.adapter = adapter
 
         findViewById<Button>(R.id.clearAllButton).setOnClickListener {
-            rows.forEach { row ->
-                row?.yenEdit?.text?.clear()
-                row?.yenEdit?.clearFocus()
-                row?.amountEdit?.text?.clear()
-                row?.amountEdit?.clearFocus()
+            for (i in 0 until adapter.count) {
+                val item = adapter.getItem(i)
+                item?.viewLogic?.clearView()
             }
         }
     }
 
-    private fun sorted3(rows: Array<Row?>): Triple<Row?, Row?, Row?> {
-        val sorted = rows.filterNotNull().filter { it.result != null }.sortedBy { it.result }
+    private fun sorted3(rows: Array<RowItem?>): Triple<RowItem?, RowItem?, RowItem?> {
+        val sorted = rows.filterNotNull().filter { it.model.calcResult() != null }.sortedBy { it.model.calcResult() }
         return Triple(sorted.getOrNull(0), sorted.getOrNull(1), sorted.getOrNull(2))
     }
 
     private fun update() {
-        rows.forEach { it?.resultView?.setBackgroundColor(Color.TRANSPARENT) }
-        val triple = sorted3(rows)
-        triple.first?.resultView?.setBackgroundColor(Color.rgb(0, 127, 0))
-        triple.second?.resultView?.setBackgroundColor(Color.rgb(75, 127, 0))
-    }
-}
-
-class Row(
-    val yenEdit: EditText,
-    val amountEdit: EditText,
-    val resultView: TextView,
-    val onUpdated: (Row) -> Unit
-) {
-    var yen: Long? = null
-        private set
-    var amount: Double? = null
-        private set
-    var result: Double? = null
-        private set
-
-    init {
-        yenEdit.addTextChangedListener(SimpleTextWatcher.after { s ->
-            yen = s.toString().toLongOrNull()
-            update()
-            onUpdated(this)
-        })
-
-        amountEdit.addTextChangedListener(SimpleTextWatcher.after { s ->
-            amount = s.toString().toDoubleOrNull()
-            update()
-            onUpdated(this)
-        })
-    }
-
-    private fun update() {
-        result = yen?.div(amount ?: 1.0)
-        resultView.text = formatResult(result)
-    }
-
-    private fun formatResult(result: Double?): String {
-        return if (result == null) {
-            ""
-        } else {
-            if (result.isInfinite() || result.isNaN()) {
-                ""
-            } else if (result < 1.0) {
-                String.format("%.2f", result)
-            } else {
-                result.roundToLong().toString()
-            }
+        val array: Array<RowItem?> = arrayOfNulls(adapter.count)
+        for (i in 0 until adapter.count) {
+            val item = adapter.getItem(i)
+            item?.viewLogic?.resultView?.setBackgroundColor(Color.TRANSPARENT)
+            array[i] = item
         }
+        val triple = sorted3(array)
+        triple.first?.viewLogic?.resultView?.setBackgroundColor(Color.rgb(0, 127, 0))
+        triple.second?.viewLogic?.resultView?.setBackgroundColor(Color.rgb(75, 127, 0))
     }
 }
