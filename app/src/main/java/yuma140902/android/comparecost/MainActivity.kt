@@ -12,6 +12,10 @@ fun isPlain(d: Double?): Boolean {
     return d != null && !d.isNaN() && !d.isInfinite()
 }
 
+//TODO: テスト書く
+//TODO: 起動時に最初のEditTextにフォーカスを当てておく
+//TODO: 次のamountEditNumberのnextFocusForwardにListViewの次の項目のyenEditNumberを設定する
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var adapter: ListAdapter
